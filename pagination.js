@@ -51,13 +51,3 @@ form.addEventListener('submit', (e) => {
   };
 });
 // console.log(students);
-
-// function myFunc(arr, size) {
-//   for (let i = 0; i < Math.ceil(listLength / size); i++) {
-//     tempArr[i] = arr.slice(c, c + size);
-//     c = c + size;
-//   }
-//   return tempArr;
-// };
-//
-// myFunc(students, 10)
