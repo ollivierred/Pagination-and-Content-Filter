@@ -23,7 +23,7 @@ pageHeader.appendChild(searchDiv);
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  function search() {
+  function searchFilter() {
     // Declare variables
     //Stores event refernce -> submit
     const isClicked = e.target;
