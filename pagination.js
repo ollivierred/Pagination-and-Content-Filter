@@ -25,6 +25,8 @@ pageHeaderDiv.appendChild(searchDiv);
 pageDiv.appendChild(paginationDiv);         //Appends 'div' with the class 'pagination' to page div
 paginationDiv.appendChild(paginationUl);    //Appends a 'ul' to paginationDiv
 
+/* ------------------- FUNCTIONS HERE -------------------- */
+
 function searchFilter() {
   const filter = searchInput.value.toUpperCase();         //Converts string to uppercase, handles case sensetivity
                                                           //Stores input value from input field
@@ -67,6 +69,14 @@ function pageGenerator(arr, size) {
   return arrGroups;
 };
 
+/* ------------------- EVENT HANDLERS HERE -------------------- */
+
+paginationUl.addEventListener('click', (e) => {
+  if (e.target.tagName == 'A') {
+    console.log(e.target);
+  }
+});
+
 form.addEventListener('submit', (e) => {    //Event listener for search click
   e.preventDefault();
   const isClicked = e.target;               //Stores event refernce -> submit
@@ -76,4 +86,3 @@ form.addEventListener('submit', (e) => {    //Event listener for search click
 
 pagination = pageGenerator(studentList, 10);
 console.log(pagination);
-// console.log(attachPaginationLinks());
