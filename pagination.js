@@ -24,17 +24,6 @@ pageHeaderDiv.appendChild(searchDiv);
 
 pageDiv.appendChild(paginationDiv);         //Appends 'div' with the class 'pagination' to page div
 paginationDiv.appendChild(paginationUl);    //Appends a 'ul' to paginationDiv
-     //Appends a 'li' the 'ul'
-
-
-
-
-form.addEventListener('submit', (e) => {    //Event listener for search click
-  e.preventDefault();
-  const isClicked = e.target;               //Stores event refernce -> submit
-  searchFilter();
-});
-
 
 function searchFilter() {
   const filter = searchInput.value.toUpperCase();         //Converts string to uppercase, handles case sensetivity
@@ -77,6 +66,12 @@ function pageGenerator(arr, size) {
   }
   return arrGroups;
 };
+
+form.addEventListener('submit', (e) => {    //Event listener for search click
+  e.preventDefault();
+  const isClicked = e.target;               //Stores event refernce -> submit
+  searchFilter();
+});
 
 
 pagination = pageGenerator(studentList, 10);
