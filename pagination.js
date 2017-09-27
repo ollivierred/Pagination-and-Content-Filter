@@ -68,12 +68,15 @@ function pageGenerator(arr, size) {
   }
   return arrGroups;
 };
+const pagination = pageGenerator(studentList, 10);
 
 /* ------------------- EVENT HANDLERS HERE -------------------- */
 
 paginationUl.addEventListener('click', (e) => {
   if (e.target.tagName == 'A') {
-    console.log(e.target);
+    for (let c = 0; c < pagination.length; c++) {
+        console.log(pagination[c]);
+    }
   }
 });
 
@@ -82,7 +85,3 @@ form.addEventListener('submit', (e) => {    //Event listener for search click
   const isClicked = e.target;               //Stores event refernce -> submit
   searchFilter();
 });
-
-
-pagination = pageGenerator(studentList, 10);
-console.log(pagination);
