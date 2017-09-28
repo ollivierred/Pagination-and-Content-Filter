@@ -1,5 +1,6 @@
 
-const studentList = Array.from(document.getElementsByTagName('h3'));
+const ul = document.querySelector('ul.student-list');
+const h3 = ul.querySelectorAll('h3');
 const pageHeaderDiv = document.querySelector('div.page-header');
 const pageDiv = document.querySelector('div.page');
 
@@ -28,17 +29,17 @@ paginationDiv.appendChild(paginationUl);    //Appends a 'ul' to paginationDiv
 /* ------------------- FUNCTIONS HERE -------------------- */
 
 function searchFilter() {
-  const filter = searchInput.value.toUpperCase();         //Converts string to uppercase, handles case sensetivity
-                                                          //Stores input value from input field
-  for (let j = 0; j < studentList.length; j++) {          //Outputs the students names to the console
-    let listNames = studentList[j].textContent;           //Stores text content of the H3 element
-    let listLi = studentList[j].parentNode.parentNode;    //Parent node of h3 -> li
-    if (listNames.toUpperCase().indexOf(filter) > -1) {   //Returns index any string entered into input field
-      listLi.style.display = ''
+  const filter = searchInput.value.toUpperCase();         //Converts string to uppercase, handles case sensetivity                                                        //Stores input value from input field
+  for (let i = 0; i < h3.length; i++) {          //Outputs the students names to the console
+    let studentNames = h3[i].textContent;           //Stores text content of the H3 element
+    let li = h3[i].parentNode.parentNode;    //Parent node of h3 -> li
+    if (studentNames.toUpperCase().indexOf(filter) > -1) {   //Returns index of any string entered into input field
+      li.style.display = ''
     } else {
-      listLi.style.display = 'none';
+      li.style.display = 'none';
     }
-    // console.log(filter); // console.log(listNames); // console.log(listLi);
+    console.log(studentNames);
+    console.log(li);
   }
 };
 
@@ -53,35 +54,30 @@ function attachPaginationLinks(i) {
 };
 
 //Splits student list and generates link numbers dynamically
-function pageGenerator(arr, size) {
-  const arrLength = arr.length;
-  let arrGroups = [];
-
-  for (let i = 0; i < arrLength; i += size) {
-    pages = arr.slice(i , i + size);
-    arrGroups.push(pages);
-  }
-  let numOfPages = arrGroups.length;
-
-  for (let i = 0; i < numOfPages; i++) {
-    attachPaginationLinks(i);
-  }
-  return arrGroups;
+function getNumberOfPages(arr, sizePerPage) {
+  let length = arr.length;
+  return numOfPages = Math.ceil(length / sizePerPage);
+  // for (let i = 0; i < numOfPages; i++) {
+  //   attachPaginationLinks(i);
+  // }
 };
-const pagination = pageGenerator(studentList, 10);
+
+function loadPages(){
+  let numPerPage = 10;
+  let currentPage = 1;
+  let begin = (currentPage - 1) * numPerPage);
+  let end = begin + numPerPage;
+
+  
+}
 
 /* ------------------- EVENT HANDLERS HERE -------------------- */
-
-paginationUl.addEventListener('click', (e) => {
-  if (e.target.tagName == 'A') {
-    for (let c = 0; c < pagination.length; c++) {
-        console.log(pagination[c]);
-    }
-  }
-});
-
 form.addEventListener('submit', (e) => {    //Event listener for search click
   e.preventDefault();
   const isClicked = e.target;               //Stores event refernce -> submit
   searchFilter();
+});
+
+paginationUl.addEventListener('click', (e) => {
+  if (e.target.tagName == 'A') {}
 });
