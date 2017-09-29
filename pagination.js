@@ -1,7 +1,8 @@
 
 /* Targets and stores: page-header, student-list UL, student-item LI,
 and H3 element in student-item */
-const PAGEHEADERDIV = document.querySelector('.page-header');
+const PAGE = document.querySelector('.page');
+const PAGEHEADER = PAGE.querySelector('.page-header');
 const UL = document.querySelector('.student-list');
 const LI = UL.querySelectorAll('.student-item');
 const H3 = document.querySelectorAll('.student-item > .student-details > h3');
@@ -9,7 +10,17 @@ const H3 = document.querySelectorAll('.student-item > .student-details > h3');
 //Create div container of form element
 const DIV = document.createElement('div');
 DIV.className = 'student-search';
-PAGEHEADERDIV.appendChild(DIV);
+PAGEHEADER.appendChild(DIV);
+
+//Create div container of pagination Ul
+const PAGINATION = document.createElement('div');
+PAGINATION.className = 'pagination';
+PAGE.appendChild(PAGINATION);
+
+//Create div container of pagination Ul
+const PAGINATIONUL = document.createElement('ul');
+PAGINATION.appendChild(PAGINATIONUL);
+
 //Create form element
 const FORM = document.createElement('form');
 DIV.appendChild(FORM);
@@ -24,22 +35,49 @@ var btnText = document.createTextNode('Search');
 BUTTON.appendChild(btnText);
 FORM.appendChild(BUTTON);
 
-// console.log(UL);
-// for (let i = 0; i < H3.length; i++) {
-//   console.log(LI[i]);
-//   console.log(H3[i]);
-//   LI[i].setAttribute("style","display: none");
-// };
+
+function appendPageLinks(list){
+  const SIZE = 10;
+  let numOfPages = Math.ceil(list.length / SIZE);
+  for (let i = 0; i < numOfPages; i++) {
+    const PAGINATIONLI = document.createElement('li');
+    const LINK = document.createElement('a');
+    LINK.style.cursor = 'pointer';
+    LINK.textContent = i + 1;
+    PAGINATIONLI.appendChild(LINK);
+    PAGINATIONUL.appendChild(PAGINATIONLI);
+  };
+  console.log('Number of pages: ' + numOfPages);
+  console.log(UL);
+};
+appendPageLinks(LI);
+
+
+
+function showPage(pageNum){
+  let div = document.querySelector('.pagination');
+  let ul = div.querySelector('ul');
+  let list = ul.querySelectorAll('li');
+  ul.addEventListener('click', (e) => {
+    if (e.target.tagName == 'A') {
+      let link = e.target;
+      link.classList.toggle('active');
+      console.log(link);
+    }
+  }, false);
+};
+showPage();
+
 
 /* ------------------- FUNCTIONS HERE -------------------- */
-function searchFilter (filter) {
+function searchList (filter) {
   console.log(filter);
   for (let i = 0; i < LI.length; i++) {    //Outputs the students names to the console
     let liNames = H3[i].textContent;  //Stores text content of the H3 element
     if (liNames.toUpperCase().indexOf(filter) > -1) {   //Returns index of any string entered into input field
-      LI[i].setAttribute("style","display: block");
+      LI[i].style.display = '';
     } else {
-      LI[i].setAttribute("style","display: none");
+      LI[i].style.display = 'none';
     }
     // console.log(liNames);
     // console.log(li);
@@ -51,8 +89,8 @@ function searchFilter (filter) {
 FORM.addEventListener('submit', (e) => {
   e.preventDefault();
   let filter = INPUT.value.toUpperCase(); //Captures the input value
-  searchFilter(filter);
-}, false );
+  searchList(filter);
+}, false);
 
 
 
@@ -83,9 +121,3 @@ FORM.addEventListener('submit', (e) => {
 //   let begin = (currentPage - 1) * numPerPage);
 //   let end = begin + numPerPage;
 // }
-
-
-
-// paginationUl.addEventListener('click', (e) => {
-//   if (e.target.tagName == 'A') {}
-// });
