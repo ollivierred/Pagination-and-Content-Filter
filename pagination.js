@@ -36,13 +36,16 @@ BUTTON.appendChild(btnText);
 FORM.appendChild(BUTTON);
 
 
-function appendPageLinks(list){
-  const SIZE = 10;
+/* ------------------- FUNCTIONS HERE -------------------- */
+
+function appendPageLinks(list, size){
+  const SIZE = size;
   let numOfPages = Math.ceil(list.length / SIZE);
   for (let i = 0; i < numOfPages; i++) {
     const PAGINATIONLI = document.createElement('li');
     const LINK = document.createElement('a');
     LINK.style.cursor = 'pointer';
+    LINK.href = '#';
     LINK.textContent = i + 1;
     PAGINATIONLI.appendChild(LINK);
     PAGINATIONUL.appendChild(PAGINATIONLI);
@@ -50,30 +53,39 @@ function appendPageLinks(list){
   console.log('Number of pages: ' + numOfPages);
   console.log(UL);
 };
-appendPageLinks(LI);
+appendPageLinks(LI, 10);
 
 
-
-function showPage(pageNum){
+function showPage(){
   let div = document.querySelector('.pagination');
   let ul = div.querySelector('ul');
-  let list = ul.querySelectorAll('li');
-  ul.addEventListener('click', (e) => {
-    if (e.target.tagName == 'A') {
-      let link = e.target;
-      link.classList.toggle('active');
-      console.log(link);
-    }
-  }, false);
+  let links = ul.querySelectorAll('a');
+
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', (e) => {
+      let current = e.target;
+      let size = 10;
+      for (let j = 0; j < size; j++) {
+        if (current === links[0]) {
+          LI[j].style.display = "block";
+        } else if (current === links[1]) {
+          LI[j].style.display = "none";
+        } else if (current === links[2]) {
+          LI[j].style.display = "none";
+        } else {
+          LI[j].style.display = "";
+        }
+      }
+    }, false);
+  }
 };
 showPage();
 
 
-/* ------------------- FUNCTIONS HERE -------------------- */
 function searchList (filter) {
   console.log(filter);
-  for (let i = 0; i < LI.length; i++) {    //Outputs the students names to the console
-    let liNames = H3[i].textContent;  //Stores text content of the H3 element
+  for (let i = 0; i < LI.length; i++) {   //Outputs the students names to the console
+    let liNames = H3[i].textContent;      //Stores text content of the H3 element
     if (liNames.toUpperCase().indexOf(filter) > -1) {   //Returns index of any string entered into input field
       LI[i].style.display = '';
     } else {
@@ -84,40 +96,15 @@ function searchList (filter) {
   }
 };
 
-/* ------------------- EVENT HANDLERS HERE -------------------- */
+/* ------------------- FUNCTIONS HERE -------------------- */
+//Hides the list of students
+for (let i = 0; i < LI.length; i++) {
+  LI[i].style.display = 'none';
+}
+
 //Event listener for search submit
 FORM.addEventListener('submit', (e) => {
   e.preventDefault();
   let filter = INPUT.value.toUpperCase(); //Captures the input value
   searchList(filter);
 }, false);
-
-
-
-
-
-// //Creates pagination link elements and numbers
-// function attachPaginationLinks(i) {
-//   let li = document.createElement('li');
-//   let a = document.createElement('a');
-//   a.textContent = i + 1;
-//   li.appendChild(a);
-//   let link = paginationUl.appendChild(li);
-//   return link;
-// };
-
-// //Splits student list and generates link numbers dynamically
-// function getNumberOfPages(arr, sizePerPage) {
-//   let length = arr.length;
-//   return numOfPages = Math.ceil(length / sizePerPage);
-//   // for (let i = 0; i < numOfPages; i++) {
-//   //   attachPaginationLinks(i);
-//   // }
-// };
-
-// function loadPages(){
-//   let numPerPage = 10;
-//   let currentPage = 1;
-//   let begin = (currentPage - 1) * numPerPage);
-//   let end = begin + numPerPage;
-// }
