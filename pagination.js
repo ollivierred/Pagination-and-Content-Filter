@@ -2,8 +2,7 @@
 //DOM Reference Nodes:
 const PAGE = document.querySelector('.page'); //page
 const PAGEHEADER = PAGE.querySelector('.page-header'); //page-header,
-const UL = document.querySelector('.student-list'); //student-list 'ul',
-const LIST = UL.querySelectorAll('.student-item'); //student-item 'li',
+const LIST = document.querySelectorAll('.student-item'); //student-item 'li',
 const LISTLENGTH = LIST.length;
 const SIZE = 10;
 let pageNumber;
@@ -56,7 +55,6 @@ function appendPageLinks(list){
   let div = document.createElement('div');
   let ul = document.createElement('ul');
   div.className = 'pagination';
-
   //Loop to generate pagination link and page number
   for (let i = 0; i < NUMOFPAGES; i++) {
     //Creates one link per iteration...
@@ -70,8 +68,7 @@ function appendPageLinks(list){
     if (i === 0) {
       a.setAttribute('class','active');
       activeLink = a;
-    }
-      //Assigns content to links
+    } //Assigns content to links
       a.href = '#';
       a.style.cursor = 'pointer';
       a.textContent = i + 1;
@@ -115,5 +112,4 @@ function searchList (value) {
 /* ------------------- FUNCTIONS CALLED -------------------- */
 showPage(0, LIST);
 let pageLinks = appendPageLinks(LIST);
-    appendPageLinks(matched);
 PAGE.appendChild(pageLinks);
