@@ -49,16 +49,14 @@ function showPage(pageNumber, listName) {
 };
 
 //Creates and controls pagination links
-function appendPageLinks(list, studentsPerPage){
+function appendPageLinks(list){
   //Determine how many pages for this student list
-  const NUMOFPAGES = Math.ceil(list.length / studentsPerPage);
+  const NUMOFPAGES = Math.ceil(list.length / SIZE);
   //Creates pagination elements...
   let div = document.createElement('div');
   let ul = document.createElement('ul');
   div.className = 'pagination';
-  let anchorTags = function () {
 
-  }
   //Loop to generate pagination link and page number
   for (let i = 0; i < NUMOFPAGES; i++) {
     //Creates one link per iteration...
@@ -72,7 +70,6 @@ function appendPageLinks(list, studentsPerPage){
     if (i === 0) {
       a.setAttribute('class','active');
       activeLink = a;
-      showPage(i, LIST);
     }
       //Assigns content to links
       a.href = '#';
@@ -103,9 +100,10 @@ function searchList (value) {
       }
   };//END OF FOR LOOP...
   if (matched.length > SIZE) {
-    appendPageLinks(matched, SIZE);
+    appendPageLinks(matched);
   } else {
-    showPage(1, matched);
+    showPage(0, matched);
+
   }
 };
   const SEARCHFORM = document.querySelector('.student-search form');
@@ -115,4 +113,7 @@ function searchList (value) {
   }, false);
 
 /* ------------------- FUNCTIONS CALLED -------------------- */
-PAGE.appendChild(appendPageLinks(LIST, SIZE));
+showPage(0, LIST);
+let pageLinks = appendPageLinks(LIST);
+    appendPageLinks(matched);
+PAGE.appendChild(pageLinks);
