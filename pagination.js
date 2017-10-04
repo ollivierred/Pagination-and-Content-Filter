@@ -1,56 +1,47 @@
 /* ------------------- FUNCTIONS HERE -------------------- */
 //Creates and appends elements related to the form and page links...
-function createElements() {
-  //Create search form elements
-  // const PAGINATIONDIV = document.createElement('div');
-  const SEARCHDIV = document.createElement('div');
-  const FORM = document.createElement('form');
-  const INPUT = document.createElement('input');
-  const BUTTON = document.createElement('button');
-  //Assign content to elements
-  // PAGINATIONDIV.className = 'pagination';
-  SEARCHDIV.className = 'student-search';
-  INPUT.setAttribute("type","text");
-  INPUT.setAttribute("placeholder","Search for students...");
-  BUTTON.textContent = 'Search';
-  //Appends form elements to the page
-  FORM.appendChild(INPUT);
-  FORM.appendChild(BUTTON);
-  SEARCHDIV.appendChild(FORM);
-  PAGEHEADER.appendChild(SEARCHDIV);
-  // PAGE.appendChild(PAGINATIONDIV);
-  return FORM;
-};
-/*------------------------------------------------------*/
-//Shows list as pages of 10...
-function showPage(pageNum, listName) {
+function hideList() {
   //Loop hides targeted list...
   for (let i = 0; i < LIST.length; i++) {
     LIST[i].style.display = 'none';
   };
+};
+
+function createElements() {
+
+};
+/*------------------------------------------------------*/
+//Shows list as pages of 10...
+function showPage(thePageNum, list) {
+  hideList();
   //Separates pages by start and ending index...
-  let indexBegin = (pageNum) * PERPAGE;
-  let indexEnd = indexBegin + PERPAGE;
-  for (let i = indexBegin; i < indexEnd; i++) {
-    const PAGETOSHOW = listName[i];
-    if (PAGETOSHOW) {
-      PAGETOSHOW.style.display = 'block';
+  let indexBegins = (thePageNum) * PERPAGE;
+  let indexEnds = indexBegins + PERPAGE;
+  for (let i = indexBegins; i < indexEnds; i++) {
+    let thisPage = list[i];
+    if (thisPage) {
+      thisPage.style.display = 'block';
     }//END OF IF STATEMENT...
   }//END OF FOR LOOP...
 };//END OF FUNCTION
 /*------------------------------------------------------*/
 function searchThisList (value) {
-  let input = value.toUpperCase();
-  let matched = [];
-  if (input === '') {
+  let searchInput = value.toUpperCase();
+  console.log(searchInput);
+  let matched = [],
+      oldPageLinks;
+
+  if (searchInput === '') {
     //Stops function from executeing on empty value...
     return;
   } else {
+    oldPageLinks = document.querySelector('.pagination');
+    PAGE.removeLastChild(oldPageLinks);
     for (let i = 0; i < LIST.length; i++) {   //Outputs the students names to the console
       let name = LIST[i].querySelectorAll('.student-details h3')[0].textContent.toUpperCase();
       let email = LIST[i].querySelectorAll('.student-details .email')[0].textContent.toUpperCase();
       //Searching list of student names and emails for a match...
-      if (name.search(input) > -1 || email.search(input) > -1) {
+      if (name.search(searchInput) > -1 || email.search(searchInput) > -1) {
         matched.push(LIST[i]);
       }
     }//END OF FOR LOOP...
@@ -122,17 +113,40 @@ function appendPageLinks(list){
 };
 
 /* ----------------- DOM Reference Nodes ----------------- */
+
+//Creates elements
+// const PAGINATIONDIV = document.createElement('div');
+const SEARCHDIV = document.createElement('div');
+const FORM = document.createElement('form');
+const INPUT = document.createElement('input');
+const BUTTON = document.createElement('button');
+//Assign content to elements
+// PAGINATIONDIV.className = 'pagination';
+SEARCHDIV.className = 'student-search';
+INPUT.setAttribute("type","text");
+INPUT.setAttribute("placeholder","Search for students...");
+BUTTON.textContent = 'Search';
+// PAGE.appendChild(PAGINATIONDIV);
 const PAGE = document.querySelector('.page'); //page
 const PAGEHEADER = PAGE.querySelector('.page-header'); //page-header,
 const LIST = document.querySelectorAll('.student-item'); //student-item 'li',
+
+//Appends elements to the page
+FORM.appendChild(INPUT);
+FORM.appendChild(BUTTON);
+SEARCHDIV.appendChild(FORM);
+PAGEHEADER.appendChild(SEARCHDIV);
+
+const SEARCHFORM = document.querySelector('.student-search form');
+const SEARCHINPUT = document.querySelector('.student-search input');
+//Variables...
 const PERPAGE = 10;
 /* ----------------- FUNCTIONS CALLED ----------------- */
-createElements();
 showPage(0, LIST);
 appendPageLinks(LIST);
 // Event listner on form tag...
-const SEARCHFORM = document.querySelector('.student-search form');
+
 SEARCHFORM.addEventListener('submit', (e) => {
   e.preventDefault();
-  searchThisList(document.querySelector('input').value);
+  searchThisList(SEARCHINPUT.value);
 }, false);
