@@ -1,62 +1,62 @@
 /* ------------------- FUNCTIONS HERE -------------------- */
 //Creates and appends elements related to the form and page links...
-function hideList() {
+function hideList(list) {
   //Loop hides targeted list...
-  for (let i = 0; i < LIST.length; i++) {
-    LIST[i].style.display = 'none';
+  for (let i = 0; i < list.length; i++) {
+    list[i].style.display = 'none';
   };
 };
-
-function createElements() {
-
-};
 /*------------------------------------------------------*/
-//Shows list as pages of 10...
-function showPage(thePageNum, list) {
-  hideList();
+//Shows STUDENTLIST as pages of 10...
+function showPage(thePageNum, thisList) {
+  hideList(STUDENTLIST);
   //Separates pages by start and ending index...
   let indexBegins = (thePageNum) * PERPAGE;
   let indexEnds = indexBegins + PERPAGE;
   for (let i = indexBegins; i < indexEnds; i++) {
-    let thisPage = list[i];
+    let thisPage = thisList[i];
     if (thisPage) {
       thisPage.style.display = 'block';
     }//END OF IF STATEMENT...
   }//END OF FOR LOOP...
 };//END OF FUNCTION
 /*------------------------------------------------------*/
-function searchThisList (value) {
+function searchThisList (value, thisList) {
   let searchInput = value.toUpperCase();
   console.log(searchInput);
   let matched = [],
       oldPageLinks;
 
   if (searchInput === '') {
-    //Stops function from executeing on empty value...
-    return;
+    showPage(0, STUDENTLIST);
+    appendPageLinks(STUDENTLIST);
+    return;   //Stops function from executeing on empty value...
   } else {
-    oldPageLinks = document.querySelector('.pagination');
-    PAGE.removeLastChild(oldPageLinks);
-    for (let i = 0; i < LIST.length; i++) {   //Outputs the students names to the console
-      let name = LIST[i].querySelectorAll('.student-details h3')[0].textContent.toUpperCase();
-      let email = LIST[i].querySelectorAll('.student-details .email')[0].textContent.toUpperCase();
+
+    oldPageLinks = PAGE.lastChild;
+    PAGE.removeChild(oldPageLinks);
+
+    for (let i = 0; i < thisList.length; i++) {   //Outputs the students names to the console
+      let name = thisList[i].querySelectorAll('.student-details h3')[0].textContent.toUpperCase();
+      let email = thisList[i].querySelectorAll('.student-details .email')[0].textContent.toUpperCase();
       //Searching list of student names and emails for a match...
-      if (name.search(searchInput) > -1 || email.search(searchInput) > -1) {
-        matched.push(LIST[i]);
+      if (name.indexOf(searchInput) > -1 || email.indexOf(searchInput) > -1) {
+        matched.push(thisList[i]);
       }
     }//END OF FOR LOOP...
     if (matched.length < PERPAGE) {
       showPage(0, matched);
     } else {
+      showPage(0, matched);
       appendPageLinks(matched);
     }
   }//END OF IF, ELSE STATEMENT...
 };
 /*------------------------------------------------------*/
 //Creates and controls pagination links
-function appendPageLinks(list){
+function appendPageLinks(thisList){
   //Determine how many pages for this student list
-  const NUMOFPAGES = Math.ceil(list.length / PERPAGE);
+  const NUMOFPAGES = Math.ceil(thisList.length / PERPAGE);
   //Creates pagination elements...
   let page = PAGE,
       div = document.createElement('div'),
@@ -87,7 +87,7 @@ function appendPageLinks(list){
   div.className = 'pagination';
   page.appendChild(div);
 
-  const LINKS = document.querySelectorAll('a');
+  const LINKS = document.querySelectorAll('.pagination a');
   //Event handlder attached to ul of pagination.
   ul.addEventListener('click', (e) => {
     //Only executes if event is an 'a' tag...
@@ -107,7 +107,7 @@ function appendPageLinks(list){
       //ParseInt converts it to an integer
       //Subtracts 1 since the index starts at 0.
       let pageIndex = parseInt(currentLink.textContent) - 1;
-      showPage(pageIndex, LIST);
+      showPage(pageIndex, STUDENTLIST);
     }//END OF IF STATEMENT...
   }, false);
 };
@@ -129,7 +129,7 @@ BUTTON.textContent = 'Search';
 // PAGE.appendChild(PAGINATIONDIV);
 const PAGE = document.querySelector('.page'); //page
 const PAGEHEADER = PAGE.querySelector('.page-header'); //page-header,
-const LIST = document.querySelectorAll('.student-item'); //student-item 'li',
+const STUDENTLIST = document.querySelectorAll('.student-item'); //student-item 'li',
 
 //Appends elements to the page
 FORM.appendChild(INPUT);
@@ -137,16 +137,18 @@ FORM.appendChild(BUTTON);
 SEARCHDIV.appendChild(FORM);
 PAGEHEADER.appendChild(SEARCHDIV);
 
+const querySelectorAll('.student-details h3')[0].textContent.toUpperCase();
+const querySelectorAll('.student-details .email')[0].textContent.toUpperCase();
 const SEARCHFORM = document.querySelector('.student-search form');
 const SEARCHINPUT = document.querySelector('.student-search input');
 //Variables...
 const PERPAGE = 10;
 /* ----------------- FUNCTIONS CALLED ----------------- */
-showPage(0, LIST);
-appendPageLinks(LIST);
+showPage(0, STUDENTLIST);
+appendPageLinks(STUDENTLIST);
 // Event listner on form tag...
 
 SEARCHFORM.addEventListener('submit', (e) => {
   e.preventDefault();
-  searchThisList(SEARCHINPUT.value);
+  searchThisList(SEARCHINPUT.value, STUDENTLIST);
 }, false);
