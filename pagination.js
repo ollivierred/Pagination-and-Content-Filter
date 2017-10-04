@@ -25,12 +25,12 @@ function createElements() {
 //Shows list as pages of 10...
 function showPage(pageNum, listName) {
   //Loop hides targeted list...
-  for (let i = 0; i < listName.length; i++) {
-    listName[i].style.display = 'none';
+  for (let i = 0; i < LIST.length; i++) {
+    LIST[i].style.display = 'none';
   };
   //Separates pages by start and ending index...
-  let indexBegin = (pageNum) * SIZE;
-  let indexEnd = indexBegin + SIZE;
+  let indexBegin = (pageNum) * PERPAGE;
+  let indexEnd = indexBegin + PERPAGE;
   for (let i = indexBegin; i < indexEnd; i++) {
     const PAGETOSHOW = listName[i];
     if (PAGETOSHOW) {
@@ -54,7 +54,7 @@ function searchThisList (value) {
         matched.push(LIST[i]);
       }
     }//END OF FOR LOOP...
-    if (matched.length < SIZE) {
+    if (matched.length < PERPAGE) {
       showPage(0, matched);
     } else {
       appendPageLinks(matched);
@@ -65,7 +65,7 @@ function searchThisList (value) {
 //Creates and controls pagination links
 function appendPageLinks(list){
   //Determine how many pages for this student list
-  const NUMOFPAGES = Math.ceil(list.length / SIZE);
+  const NUMOFPAGES = Math.ceil(list.length / PERPAGE);
   //Creates pagination elements...
   let page = PAGE,
       div = document.createElement('div'),
@@ -125,7 +125,7 @@ function appendPageLinks(list){
 const PAGE = document.querySelector('.page'); //page
 const PAGEHEADER = PAGE.querySelector('.page-header'); //page-header,
 const LIST = document.querySelectorAll('.student-item'); //student-item 'li',
-const SIZE = 10;
+const PERPAGE = 10;
 /* ----------------- FUNCTIONS CALLED ----------------- */
 createElements();
 showPage(0, LIST);
