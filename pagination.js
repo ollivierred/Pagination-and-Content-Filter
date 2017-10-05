@@ -1,21 +1,27 @@
 /* ------------------- DECLARED FUNCTIONS HERE -------------------- */
+//Will hide any list arguement passed through it
 function hideList(thisList) {
   //Loop hides targeted list...
   for (let i = 0; i < thisList.length; i++) {
     thisList[i].style.display = 'none';
   };
-};
+};//END OF FUNCTION...
+
+//Removes pagination links...
 function removeOldLinks(pageNode) {
   let oldLinks;
   oldLinks = pageNode.lastChild;
   pageNode.removeChild(oldLinks);
-};
+};//END OF FUNCTION...
+
+//Generates error message for output...
 function noMatchFound() {
   let span = document.createElement('span');
   span.textContent = "Whoops, no match found...";
   PAGE.appendChild(span);
   hideList(STUDENTLIST);
-};
+};//END OF FUNCTION...
+
 /*------------------------------------------------------*/
 //Shows STUDENTLIST as pages of 10...
 function showPage(thePageNum, thisList) {
@@ -30,8 +36,12 @@ function showPage(thePageNum, thisList) {
     }//END OF IF STATEMENT...
   }//END OF FOR LOOP...
 };//END OF FUNCTION
+
 /*------------------------------------------------------*/
-//Creates pagination links...
+//Calculate number of pages based on list length
+//Creates and appends pagination links
+//Assigns a page number to each link
+//Appends the pagination to the page
 function appendPageLinks(thisList) {
   //Determine how many pages for this student list
   const NUMOFPAGES = Math.ceil(thisList.length / PERPAGE);
@@ -58,7 +68,8 @@ function appendPageLinks(thisList) {
   page.appendChild(div);
   //Event handlder attached to ul of pagination.
   linkWasClicked(ul, thisList);
-};
+};//END OF FUNCTION...
+
 /*------------------------------------------------------*/
 //Controls actions when list is filtered...
 function searchThisList (inputValue, thisList) {
@@ -71,7 +82,7 @@ function searchThisList (inputValue, thisList) {
     appendPageLinks(STUDENTLIST);
     return;   //Stops function from executeing on empty value...
   } else {
-    for (let i = 0; i < thisList.length; i++) {   //Outputs the students names to the console
+    for (let i = 0; i < thisList.length; i++) {
       let name = thisList[i].querySelectorAll('.student-details h3')[0].textContent.toUpperCase();
       let email = thisList[i].querySelectorAll('.student-details .email')[0].textContent.toUpperCase();
       //Searching list of student names and emails for a match...
@@ -81,15 +92,20 @@ function searchThisList (inputValue, thisList) {
     }//END OF FOR LOOP...
     removeOldLinks(PAGE);
     if (matched.length > PERPAGE) {
+      //Shows first page of matched list
+      //Then appends new pagination links
       showPage(0, matched);
       appendPageLinks(matched);
     } else if (matched.length === 0) {
+      //Error message
       noMatchFound();
     } else {
+      //Shows the first page, since matched.length is less that 10
       showPage(0, matched);
     }//END OF IF, ELSE STATEMENT...
   }//END OF IF, ELSE STATEMENT...
-};
+};//END OF function
+
 /*------------------------------------------------------*/
 //Controls pagination links...
 function linkWasClicked(parentNode, thisList) {
@@ -142,6 +158,7 @@ const SEARCHFORM = document.querySelector('.student-search form');
 const SEARCHINPUT = document.querySelector('.student-search input');
 //Global Variables...
 const PERPAGE = 10;
+
 /* ----------------- FUNCTIONS CALLED ----------------- */
 showPage(0, STUDENTLIST);
 appendPageLinks(STUDENTLIST);
