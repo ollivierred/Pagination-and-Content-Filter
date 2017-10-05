@@ -9,17 +9,32 @@ function hideList(thisList) {
 
 //Removes pagination links...
 function removeOldLinks(pageNode) {
-  let oldLinks;
-  oldLinks = pageNode.lastChild;
-  pageNode.removeChild(oldLinks);
+  let oldLinks = pageNode.querySelector('.pagination');
+  if (oldLinks === null) {
+    return;
+  } else {
+    pageNode.removeChild(oldLinks);
+  }
+};//END OF FUNCTION...
+
+//For the straggling message node 
+function removeMessage() {
+  let messageNode = document.querySelector('.error');
+  if (messageNode) { PAGE.removeChild(messageNode); }
 };//END OF FUNCTION...
 
 //Generates error message for output...
 function noMatchFound() {
-  let span = document.createElement('span');
-  span.textContent = "Whoops, no match found...";
-  PAGE.appendChild(span);
-  hideList(STUDENTLIST);
+  let messageCheck = document.querySelector('.error');
+  if (messageCheck === null) {
+    hideList(STUDENTLIST);
+    let span = document.createElement('span');
+    span.className = 'error';
+    span.textContent = "Whoops, no match found...";
+    PAGE.appendChild(span);
+  } else {
+    return;
+  }
 };//END OF FUNCTION...
 
 /*------------------------------------------------------*/
@@ -31,9 +46,7 @@ function showPage(thePageNum, thisList) {
   let indexEnds = indexBegins + PERPAGE;
   for (let i = indexBegins; i < indexEnds; i++) {
     let thisPage = thisList[i];
-    if (thisPage) {
-      thisPage.style.display = 'block';
-    }//END OF IF STATEMENT...
+    if (thisPage) { thisPage.style.display = 'block'; } //END OF IF STATEMENT...
   }//END OF FOR LOOP...
 };//END OF FUNCTION
 
@@ -77,10 +90,11 @@ function searchThisList (inputValue, thisList) {
   let matched = [];
   //NICE TRY, NO EMPTY STRINGS TODAY!
   if (searchInput === '') {
+    removeMessage()
     removeOldLinks(PAGE);
     showPage(0, STUDENTLIST);
     appendPageLinks(STUDENTLIST);
-    return;   //Stops function from executeing on empty value...
+    return; //Not sure if this best practice...
   } else {
     for (let i = 0; i < thisList.length; i++) {
       let name = thisList[i].querySelectorAll('.student-details h3')[0].textContent.toUpperCase();
@@ -92,15 +106,14 @@ function searchThisList (inputValue, thisList) {
     }//END OF FOR LOOP...
     removeOldLinks(PAGE);
     if (matched.length > PERPAGE) {
-      //Shows first page of matched list
-      //Then appends new pagination links
+      removeMessage();
       showPage(0, matched);
       appendPageLinks(matched);
     } else if (matched.length === 0) {
       //Error message
       noMatchFound();
     } else {
-      //Shows the first page, since matched.length is less that 10
+      removeMessage();
       showPage(0, matched);
     }//END OF IF, ELSE STATEMENT...
   }//END OF IF, ELSE STATEMENT...
@@ -135,24 +148,24 @@ function linkWasClicked(parentNode, thisList) {
 
 /* ----------------- DOM Reference Nodes ----------------- */
 //Creates elements...
-const SEARCHDIV = document.createElement('div');
-const FORM = document.createElement('form');
-const INPUT = document.createElement('input');
-const BUTTON = document.createElement('button');
+const searchDiv = document.createElement('div');
+const form = document.createElement('form');
+const input = document.createElement('input');
+const button = document.createElement('button');
 //Assign content to elements
-SEARCHDIV.className = 'student-search';
-INPUT.setAttribute("type","text");
-INPUT.setAttribute("placeholder","Search for students...");
-BUTTON.textContent = 'Search';
+searchDiv.className = 'student-search';
+input.setAttribute("type","text");
+input.setAttribute("placeholder","Search for students...");
+button.textContent = 'Search';
 //Captures HTML page related elements...
 const PAGE = document.querySelector('.page'); //page
 const PAGEHEADER = PAGE.querySelector('.page-header'); //page-header,
 const STUDENTLIST = document.querySelectorAll('.student-item'); //student-item 'li',
 //Appends elements to the page
-FORM.appendChild(INPUT);
-FORM.appendChild(BUTTON);
-SEARCHDIV.appendChild(FORM);
-PAGEHEADER.appendChild(SEARCHDIV);
+form.appendChild(input);
+form.appendChild(button);
+searchDiv.appendChild(form);
+PAGEHEADER.appendChild(searchDiv);
 //Captures HTML search related nodes...
 const SEARCHFORM = document.querySelector('.student-search form');
 const SEARCHINPUT = document.querySelector('.student-search input');
@@ -163,7 +176,7 @@ const PERPAGE = 10;
 showPage(0, STUDENTLIST);
 appendPageLinks(STUDENTLIST);
 
-SEARCHFORM.addEventListener('submit', (e) => {
+SEARCHFORM.addEventListener('keyup', (e) => {
   e.preventDefault();
   searchThisList(SEARCHINPUT.value, STUDENTLIST);
 }, false);
