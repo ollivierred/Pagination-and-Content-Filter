@@ -10,6 +10,12 @@ function removeOldLinks(pageNode) {
   oldLinks = pageNode.lastChild;
   pageNode.removeChild(oldLinks);
 };
+function noMatchFound() {
+  let span = document.createElement('span');
+  span.textContent = "Whoops, no match found...";
+  PAGE.appendChild(span);
+  hideList(STUDENTLIST);
+};
 /*------------------------------------------------------*/
 //Shows STUDENTLIST as pages of 10...
 function showPage(thePageNum, thisList) {
@@ -26,14 +32,14 @@ function showPage(thePageNum, thisList) {
 };//END OF FUNCTION
 /*------------------------------------------------------*/
 //Creates pagination links...
-function appendPageLinks(thisList){
+function appendPageLinks(thisList) {
   //Determine how many pages for this student list
   const NUMOFPAGES = Math.ceil(thisList.length / PERPAGE);
   //Creates pagination elements...
   let page = PAGE,
       div = document.createElement('div'),
       ul = document.createElement('ul'),
-      li, a, activeLink;
+      li, a;
   //Creates one link per iteration...
   for (let i = 0; i < NUMOFPAGES; i++) {
     let li = document.createElement('li');
@@ -58,6 +64,7 @@ function appendPageLinks(thisList){
 function searchThisList (inputValue, thisList) {
   let searchInput = inputValue.toUpperCase();
   let matched = [];
+  //NICE TRY, NO EMPTY STRINGS TODAY!
   if (searchInput === '') {
     removeOldLinks(PAGE);
     showPage(0, STUDENTLIST);
@@ -68,14 +75,18 @@ function searchThisList (inputValue, thisList) {
       let name = thisList[i].querySelectorAll('.student-details h3')[0].textContent.toUpperCase();
       let email = thisList[i].querySelectorAll('.student-details .email')[0].textContent.toUpperCase();
       //Searching list of student names and emails for a match...
-      if (name.indexOf(searchInput) > -1 || email.indexOf(searchInput) > -1) { matched.push(thisList[i]); }
+      if (name.indexOf(searchInput) > -1 || email.indexOf(searchInput) > -1) {
+        matched.push(thisList[i]);
+      }
     }//END OF FOR LOOP...
     removeOldLinks(PAGE);
-    if (matched.length < PERPAGE) {
-      showPage(0, matched);
-    } else {
+    if (matched.length > PERPAGE) {
       showPage(0, matched);
       appendPageLinks(matched);
+    } else if (matched.length === 0) {
+      noMatchFound();
+    } else {
+      showPage(0, matched);
     }//END OF IF, ELSE STATEMENT...
   }//END OF IF, ELSE STATEMENT...
 };
