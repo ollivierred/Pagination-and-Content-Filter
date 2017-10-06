@@ -5,7 +5,7 @@ function hideList(thisList) {
   for (let i = 0; i < thisList.length; i++) {
     thisList[i].style.display = 'none';
   };
-};//END OF FUNCTION...
+};
 
 //Removes pagination links...
 function removeOldLinks(pageNode) {
@@ -15,13 +15,13 @@ function removeOldLinks(pageNode) {
   } else {
     pageNode.removeChild(oldLinks);
   }
-};//END OF FUNCTION...
+};
 
-//For the straggling message node 
+//Removes message node from page
 function removeMessage() {
   let messageNode = document.querySelector('.error');
   if (messageNode) { PAGE.removeChild(messageNode); }
-};//END OF FUNCTION...
+};
 
 //Generates error message for output...
 function noMatchFound() {
@@ -35,7 +35,7 @@ function noMatchFound() {
   } else {
     return;
   }
-};//END OF FUNCTION...
+};
 
 /*------------------------------------------------------*/
 //Shows STUDENTLIST as pages of 10...
@@ -46,9 +46,9 @@ function showPage(thePageNum, thisList) {
   let indexEnds = indexBegins + PERPAGE;
   for (let i = indexBegins; i < indexEnds; i++) {
     let thisPage = thisList[i];
-    if (thisPage) { thisPage.style.display = 'block'; } //END OF IF STATEMENT...
-  }//END OF FOR LOOP...
-};//END OF FUNCTION
+    if (thisPage) { thisPage.style.display = 'block'; }
+  };
+};
 
 /*------------------------------------------------------*/
 //Calculate number of pages based on list length
@@ -70,18 +70,18 @@ function appendPageLinks(thisList) {
         a.style.cursor = 'pointer'; //Assigns content to links
         a.textContent = i + 1; //Adds page number to link...
         a.href = '#';
-    //Append 'a' to 'li', then each 'li' to the unordered list...
-    li.appendChild(a);
-    ul.appendChild(li);
+        //Append 'a' to 'li', then each 'li' to the unordered list...
+        li.appendChild(a);
+        ul.appendChild(li);
     //Attaches an active class on page link '1'...
     if (i === 0) { a.setAttribute('class','active'); }
-  }//END OF LOOP...
+  };
   div.appendChild(ul);
   div.className = 'pagination';
   page.appendChild(div);
   //Event handlder attached to ul of pagination.
   linkWasClicked(ul, thisList);
-};//END OF FUNCTION...
+};
 
 /*------------------------------------------------------*/
 //Controls actions when list is filtered...
@@ -90,7 +90,7 @@ function searchThisList (inputValue, thisList) {
   let matched = [];
   //NICE TRY, NO EMPTY STRINGS TODAY!
   if (searchInput === '') {
-    removeMessage()
+    removeMessage();
     removeOldLinks(PAGE);
     showPage(0, STUDENTLIST);
     appendPageLinks(STUDENTLIST);
@@ -102,8 +102,8 @@ function searchThisList (inputValue, thisList) {
       //Searching list of student names and emails for a match...
       if (name.indexOf(searchInput) > -1 || email.indexOf(searchInput) > -1) {
         matched.push(thisList[i]);
-      }
-    }//END OF FOR LOOP...
+      };
+    };
     removeOldLinks(PAGE);
     if (matched.length > PERPAGE) {
       removeMessage();
@@ -115,9 +115,9 @@ function searchThisList (inputValue, thisList) {
     } else {
       removeMessage();
       showPage(0, matched);
-    }//END OF IF, ELSE STATEMENT...
-  }//END OF IF, ELSE STATEMENT...
-};//END OF function
+    }
+  };
+};
 
 /*------------------------------------------------------*/
 //Controls pagination links...
@@ -134,17 +134,17 @@ function linkWasClicked(parentNode, thisList) {
           LINKS[i].removeAttribute('class');
           //Sets current link stored to 'active'
           currentLink.setAttribute('class','active');
-        }//END OF FOR LOOP...
-      }//END OF IF STATEMENT...
+        };
+      };
       /*------------------------------------------*/
       //Retrieves the page number of current link
       //ParseInt converts it to an integer
       //Subtracts 1 since the index starts at 0.
       let pageIndex = parseInt(currentLink.textContent) - 1;
       showPage(pageIndex, thisList);
-    }//END OF IF STATEMENT...
+    };
   }, false);
-};//END OF FUNCTION...
+};
 
 /* ----------------- DOM Reference Nodes ----------------- */
 //Creates elements...
@@ -176,6 +176,7 @@ const PERPAGE = 10;
 showPage(0, STUDENTLIST);
 appendPageLinks(STUDENTLIST);
 
+//Event listener on form element...
 SEARCHFORM.addEventListener('keyup', (e) => {
   e.preventDefault();
   searchThisList(SEARCHINPUT.value, STUDENTLIST);
