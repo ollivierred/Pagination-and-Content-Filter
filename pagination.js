@@ -2,18 +2,16 @@
 //Will hide any list arguement passed through it
 function hideList(thisList) {
   //Loop hides targeted list...
-  for (let i = 0; i < thisList.length; i++) {
-    thisList[i].style.display = 'none';
-  };
+  $(thisList).hide();
 };
 
 //Removes pagination links...
 function removeOldLinks(pageNode) {
-  let oldLinks = pageNode.querySelector('.pagination');
+  let oldLinks = $('pageNode.pagination');
   if (oldLinks === null) {
     return;
   } else {
-    pageNode.removeChild(oldLinks);
+    pageNode.remove(oldLinks);
   }
 };
 
@@ -76,9 +74,9 @@ function appendPageLinks(thisList) {
     //Attaches an active class on page link '1'...
     if (i === 0) { a.setAttribute('class','active'); }
   };
-  div.appendChild(ul);
+  div.append(ul);
   div.className = 'pagination';
-  page.appendChild(div);
+  page.append(div);
   //Event handlder attached to ul of pagination.
   linkWasClicked(ul, thisList);
 };
@@ -147,28 +145,17 @@ function linkWasClicked(parentNode, thisList) {
 };
 
 /* ----------------- DOM Reference Nodes ----------------- */
+
+const PAGE = $('div.page');
+const PAGEHEADER = $('div.page-header');
+const STUDENTLIST = $('li.student-item');
 //Creates elements...
-const searchDiv = document.createElement('div');
-const form = document.createElement('form');
-const input = document.createElement('input');
-const button = document.createElement('button');
-//Assign content to elements
-searchDiv.className = 'student-search';
-input.setAttribute("type","text");
-input.setAttribute("placeholder","Search for students...");
-button.textContent = 'Search';
-//Captures HTML page related elements...
-const PAGE = document.querySelector('.page'); //page
-const PAGEHEADER = PAGE.querySelector('.page-header'); //page-header,
-const STUDENTLIST = document.querySelectorAll('.student-item'); //student-item 'li',
+let $paginationDiv = $('<div class="student-search"></div>');
+let $paginationForm = $('<form class="search-form"><input type="text" placeholder="Search for students..."><button>Search</button></form>');
 //Appends elements to the page
-form.appendChild(input);
-form.appendChild(button);
-searchDiv.appendChild(form);
-PAGEHEADER.appendChild(searchDiv);
-//Captures HTML search related nodes...
-const SEARCHFORM = document.querySelector('.student-search form');
-const SEARCHINPUT = document.querySelector('.student-search input');
+$paginationDiv.append($paginationForm);
+PAGEHEADER.append($paginationDiv);
+
 //Global Variables...
 const PERPAGE = 10;
 
@@ -177,7 +164,9 @@ showPage(0, STUDENTLIST);
 appendPageLinks(STUDENTLIST);
 
 //Event listener on form element...
-SEARCHFORM.addEventListener('keyup', (e) => {
+$('.search-form').on('submit', (e) => {
   e.preventDefault();
-  searchThisList(SEARCHINPUT.value, STUDENTLIST);
-}, false);
+  let $searchValue = $('input:text').val();
+  // console.log(searchValue);
+  // searchThisList($searchValue, STUDENTLIST);
+});
